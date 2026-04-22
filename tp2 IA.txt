@@ -1,0 +1,235 @@
+CAS B
+
+
+
+
+Étape 1 — Cadrage du projet
+
+
+
+Quelle décision business est visée ?
+
+Retranscrire les avis clients pour connaître le taux de satisfaction
+
+
+
+Comment mesurer le succès côté business ?
+
+Le taux de satisfaction est entre 0 et 1, donc plus la moyenne sera proche de 1, plus c'est positif
+
+
+
+Quelle colonne prédire ? Quelles valeurs possibles ?
+c'est la deuxième colonne, les valeurs possibles sont 0 ou 1.
+
+
+
+Classification binaire / multi-classe / régression ?
+Binaire car deux réponses possibles : 1 ou 0
+
+
+
+
+Accuracy ? F1-macro ? Recall ? Justifiez ce choix.
+
+Le F1-macro permet d’évaluer les performances de manière équilibrée entre les classes, en prenant en compte à la fois la précision et le rappel.
+
+
+
+
+Biais potentiels ? Variables sensibles ?
+
+variables avis
+Phrases bourrées de fautes mal comprises. Humour pas compris 
+
+
+
+Inacceptable / Haut risque / Risque limité / Minimal ?
+risque limité : cela peut dévaluer un article
+
+
+
+
+
+Étape 2 — Préparation des données
+
+
+Questions (tous les cas — après Étape 2) : 1. Votre dataset est-il équilibré ? Quelle proportion de chaque classe ?
+
+
+oui car 500 pour 1 et 500 pour 0
+
+
+ 
+
+2. Y a-t-il des variables potentiellement sensibles (âge, localisation, genre…) ? Faut-il les exclure ?
+
+Actuellement, il n'y a aucune variable sur des informations de l'utilisateur en lui-même donc non. Mais si y en avait,  des réflexions pourraient être faites. 
+
+
+
+
+3. Quel prétraitement avez-vous appliqué et pourquoi (encodage, normalisation, TF-IDF) ?
+
+On utilise TF-IDF pour que le modèle puisse traiter du texte sous forme numérique
+
+
+
+
+
+
+Étape 3 — Modélisation : 3 modèles à comparer
+
+
+
+1. Quel modèle obtient les meilleures performances sur votre cas ?
+
+c'est le modèle "Régression Logistique" qui est le plus performant
+
+
+2. La Régression Logistique est-elle compétitive malgré sa simplicité ? 
+
+Oui vu que c'est la plus performante
+
+
+3. Quel modèle choisiriez-vous pour un déploiement en production ? Justifiez votre choix en tenant compte de : performance, interprétabilité, temps dʼinférence, coût de maintenance
+
+
+Je choisirais la Régression Logistique pour un déploiement en production.
+Globalement, la performance correcte, l'interprétabilité est élevée. Le temps d’inférence qui est très rapide et le coût de maintenance est faible
+
+
+
+
+Étape 4 — Évaluation approfondie
+
+
+
+
+1. Identifiez les faux positifs et faux négatifs dans votre matrice de confusion.
+
+Selon la matrice, on regarde la colonne "réalité" à 0, on regarde la valeur correspondante à "prédiction" à 1
+Cela donne les faux positifs, notre cas = 30%
+
+Selon la matrice, on regarde la colonne "réalité" à 1, on regarde la valeur correspondante à "prédiction" à 0
+Cela donne les faux négatifs, notre cas = 31%
+
+
+
+2. Dans votre contexte métier "sentiment", lequel est le plus coûteux ? Pourquoi ? 
+
+Il ne faut pas qu'un avis négatif soit considéré comme positif et fasse augmenter injustement la note moyenne d'un produit ce qui pourrait influencer d'autres acheteurs. L'inverse est moins grave car un avis négatif ne pousse pas à la consommation
+
+
+
+
+
+
+3. Votre meilleur modèle est-il suffisant pour un déploiement réel ? Quelles garanties supplémentaires seraient nécessaires ?
+
+Non.
+Il faut impérativement baisser la probabilité d'avoir un faux positif donc améliorer le modèle. 
+
+
+
+
+Étape 5 — Explicabilité SHAP
+
+Quelles sont les 3 variables les plus influentes selon SHAP ?
+
+Les plus influents sont phone, love et easy car ils ont un plus grand score sur  le graphique
+
+
+Ces variables sont-elles cohérentes avec votre intuition métier ? 
+(Cas B : les mots identifiés correspondent-ils à des indicateurs
+évidents de satisfaction ?)
+
+Oui, love et easy sont des indicateurs évidents.
+
+
+Si une variable sensible (âge, genre, origine…) apparaît parmi les plus
+importantes, que faut-il faire ?
+
+Une variable sensible doit être analysée et éventuellement supprimée pour éviter les biais.
+
+
+
+
+Étape 6 — Conformité AI Act 
+
+
+
+Niveau de risque : Risque limité
+
+Justification : analyse d’avis produits, impact faible sur les individus
+
+Base légale RGPD : Intérêt légitime
+
+DPIA requis : Non
+Pourquoi : pas de données sensibles ni décisions critiques
+
+Explicabilité : Oui (SHAP pour expliquer l’influence des mots sur chaque prédiction)
+
+Supervision humaine : Recommandée pour cas ambigus
+
+Audit et traçabilité : Oui (logs, versioning modèle)
+
+Droits des personnes : Accès, rectification, opposition possibles
+
+
+
+
+
+
+
+Votre système nécessite-t-il un audit de conformité avant déploiement ? 
+Par qui ? 
+
+L'audit ne devrait pas être obligatoire, il serait pour l'équipe interne
+
+
+
+Les personnes affectées par les décisions ont-elles un droit de recours ?
+
+oui, possibilité de contester une décision automatisée 
+
+Quel organisme de contrôle surveille ce type de système dans votre secteur (CNIL, ANC, ANSSI…) 
+
+CNIL
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+┌─────────────────────────────────────────────────────────────────┐
+│  CAS : B                    MODÈLE RETENU : Logistic Regression                    │
+├─────────────────────────────────────────────────────────────────┤
+│  MÉTRIQUES FINALES                                                                 │
+│  Accuracy : 76.5%    F1-macro : 0.765    F1-weighted : 0.765                       │
+├─────────────────────────────────────────────────────────────────┤
+│  TOP 3 VARIABLES (SHAP)                                                            │
+│  1. love            2. phone             3. comfortable                            │
+├─────────────────────────────────────────────────────────────────┤
+│  AI ACT : Risque minimal                                                           │
+│  Outil interne d'analyse de texte sans impact direct sur les                       │
+│  droits des personnes.                                                             │
+├─────────────────────────────────────────────────────────────────┤
+│  LIMITE PRINCIPALE : Le modèle rate les avis ironiques et les                      │
+│  formulations ambigues, une relecture humaine est nécessaire                       │
+│  pour les prédictions avec un score de confiance sous 70%.                         │
+└─────────────────────────────────────────────────────────────────┘
+
+
+
+
+
+
