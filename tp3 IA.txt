@@ -104,17 +104,15 @@ Je choisirais environ 10 à 12 époques pour le dense et autour de 8 à 10 pour 
 
 
 
-
-
-
 Étape 7 — Comparaison des 3 approches et décision
 
 
-
-
-
-
-
+1 
+Aucun modèle n'atteint l'objectif car le CNN est le meilleur mais reste autour de 8% d'erreur
+2 
+Les catégories les plus confondues sont pull et chemise ainsi que t shirt et chemise ce qui est cohérent visuellement
+3 
+Oui il faut aussi regarder precision et recall car certaines erreurs sont plus importantes que d'autres
 
 
 
@@ -135,31 +133,43 @@ Je choisirais environ 10 à 12 époques pour le dense et autour de 8 à 10 pour 
 Étape 8 — Analyse des erreurs pour l’équipe produit
 
 
+1 
+Oui les erreurs sont compréhensibles car elles concernent surtout des classes visuellement proches
+2 
+Oui certaines erreurs ont une forte confiance ce qui est dangereux car le modèle peut être sûr de lui en étant faux
+3 
+Il faut ajouter une validation humaine enrichir le dataset faire de la data augmentation ou fusionner certaines classes
 
 
 
 
 
 
+Étape 9
+1 
+Les filtres détectent des contours des textures et des zones homogènes
+2 
+Les feature maps montrent que certains filtres détectent les formes et d autres le fond ou le bruit
+3 
+Non ce n est pas suffisant pour prouver l absence de biais donc il faut tester avec différents fonds utiliser Grad CAM et analyser le dataset
 
 
 
 
 
 
+1 
+Le CNN est plus performant que Random Forest car il exploite la structure spatiale donc il est préférable en production
+2 
+Le CNN est meilleur que le réseau dense car il capte les motifs locaux alors que le dense traite les pixels indépendamment
+3 
+Il faut améliorer la fiabilité en production en ajoutant un seuil de confiance une validation humaine et en améliorant les données
+
+Conclusion
+
+Le CNN est le meilleur modèle car il généralise mieux et est plus robuste mais il ne suffit pas encore pour atteindre l objectif business
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-Étape 9 — Visualiser ce que le CNN a appris
 
