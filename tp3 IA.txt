@@ -1,0 +1,165 @@
+
+
+
+
+
+
+
+
+Étape 1 — Charger et explorer les données produits Zalando
+1 
+Le dataset est globalement équilibré donc le modèle apprend sans biais mais en production un déséquilibre pourrait fausser les prédictions
+2
+Oui un pull et une chemise peuvent être confondus car leurs formes sont proches surtout avec peu de détails visuels donc le modèle peut se tromper
+3 
+Non 28x28 est trop faible pour la réalité et en production chez Zalando on utiliserait plutôt des images autour de 128x128 ou 224x224 pour capter plus de détails
+
+
+
+
+
+
+Étape 2 — Prétraitement des images
+
+On normalise les pixels entre 0 et 1 pour stabiliser et accélérer l’apprentissage du réseau car sinon avec des valeurs entre 0 et 255 le modèle converge plus lentement et peut devenir instable ou moins performant
+
+
+
+
+
+
+Étape 3 — Baseline : Random Forest (ML classique)
+
+1 
+Non une accuracy de 87.6% donne un taux d erreur de 12.4% donc cela ne permet pas d atteindre l objectif business inférieur à 5%
+2 
+Non Random Forest ne comprend pas les relations spatiales entre pixels et traite chaque pixel indépendamment donc il ne capture pas bien les contours ou textures
+
+
+
+
+
+
+
+Étape 4 — Réseau de neurones dense (MLP)
+
+
+1 
+Le réseau a 109386 paramètres entraînables au total ce qui est bien plus que les 784 pixels d une image donc il apprend beaucoup de combinaisons possibles à partir des pixels
+2 
+Softmax transforme les scores de sortie en probabilités dont la somme vaut 1 ce qui est adapté car chaque image doit être classée dans une seule catégorie parmi 10
+3 
+On utilise sparse categorical crossentropy car on a plusieurs classes exclusives avec des labels entiers alors que binary crossentropy sert surtout aux problèmes à deux classes ou aux sorties indépendantes
+
+
+
+
+
+
+
+
+Étape 5 — Réseau convolutif (CNN)
+
+
+
+1 
+La sortie devient 26x26 car un filtre 3x3 appliqué sans padding ne peut se placer que sur les zones complètes de l image donc on perd un pixel sur chaque bord
+2 
+MaxPooling réduit la taille des cartes de caractéristiques pour garder l information utile et sans cette réduction le modèle serait plus lourd plus lent et plus sensible au surapprentissage
+3 
+Dropout réduit l overfitting car il empêche les neurones de trop dépendre les uns des autres et force le réseau à apprendre des représentations plus robustes
+
+
+
+
+
+
+
+
+
+
+
+
+Étape 6 — Courbes d’apprentissage : diagnostic production
+
+1 
+Oui le réseau dense montre un léger overfitting car l accuracy train devient plus haute que validation alors que le CNN reste plus stable
+2 
+Le CNN converge globalement plus vite vers une bonne performance car il exploite mieux la structure des images
+3 
+Je choisirais environ 10 à 12 époques pour le dense et autour de 8 à 10 pour le CNN afin d éviter le surapprentissage
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Étape 7 — Comparaison des 3 approches et décision
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Étape 8 — Analyse des erreurs pour l’équipe produit
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Étape 9 — Visualiser ce que le CNN a appris
+
